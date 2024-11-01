@@ -1,0 +1,51 @@
+{
+  "name": "alx-webstack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "jest --detectOpenHandles --config jest.config.js"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./src/setupTests.js"
+    ]
+  },
+  "engines": {
+    "node": ">=16.17.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Glorytefe/alx-webstack.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Glorytefe/alx-webstack/issues"
+  },
+  "homepage": "https://github.com/Glorytefe/alx-webstack#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "mongodb": "^6.10.0",
+    "mongoose": "^7.8.2",
+    "mongoose-unique-validator": "^4.0.1",
+    "swagger-ui-express": "^5.0.1",
+    "validator": "^13.12.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.7",
+    "supertest": "^7.0.0"
+  }
+}
