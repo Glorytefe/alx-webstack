@@ -3,6 +3,36 @@
 ## Overview
 The Blog API Platform is a RESTful API designed for managing blog posts, comments, and users. It allows users to create, read, update, and delete blog posts and comments, providing a flexible and scalable solution for blogging applications.
 
+## Project Structure:
+
+    src/
+    ├── config
+    │   ├── config.js             # General configuration settings
+    │   ├── db.js                 # Database connection setup
+    │   ├── swagger.js            # Swagger documentation configuration
+    ├── controllers
+    │   ├── postController.js     # Business logic for posts
+    │   ├── userController.js     # Business logic for users
+    ├── middlewares
+    │   ├── requireAuth.js     # Middleware for authentication
+    │   ├── requireAdmin.js    # Middleware for admin authorization
+    ├── models
+    │   ├── Post.js               # Mongoose schema and model for posts
+    │   ├── User.js               # Mongoose schema and model for users
+    ├── routes
+    │   ├── postRoutes.js         # Routes for post-related operations
+    │   ├── userRoutes.js         # Routes for user-related operations
+    ├── tests
+    │   ├── post.test.js          # Tests for post-related operations
+    │   ├── setupTests.js         # setup for test
+    │   ├── user.test.js          # Tests for user-related operations
+    ├── .env                      # Environment variables file
+    ├── app.js                    # Entry point for the application
+    ├── package.json              # Project dependencies and scripts
+    └── README.md                 # Project documentation (this file)
+    └── ...
+
+
 ## Features
 - **User Authentication**: Secure user registration and login with JSON Web Tokens (JWT).
 - **Post Management**: Create, read, update, and delete blog posts.
