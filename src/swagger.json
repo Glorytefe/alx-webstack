@@ -115,7 +115,7 @@
           }
         }
       },
-      "patch": {
+      "put": {
         "summary": "Update a post by ID",
         "security": [
           {
