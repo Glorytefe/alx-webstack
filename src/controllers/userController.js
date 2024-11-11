@@ -6,10 +6,15 @@ exports.createUser = async (req, res) => {
   try {
     const body = _.pick(req.body, ['email', 'password', 'displayName']);
     const user = new User(body);
-    const existingUser = await User.findOne({ email: body.email });
+    const existingEmail = await User.findOne({ email: body.email });
+    const existingUname = await User.findOne({ email: body.displayName });
+
     
-    if (existingUser) {
+    if (existingEmail) {
       return res.status(400).send({ error: 'Email already exists.' });
+    };
+    if (existingUname) {
+      return res.status(400).send({ error: 'Display name already exists.' });
     }
     await user.save();
     const token = await user.generateAuthToken();
@@ -50,6 +55,6 @@ exports.logoutUser = async (req, res) => {
     await req.user.removeToken(req.token);
     res.status(200).send();
   } catch (e) {
-    res.status(400).send(e);
+    res.status(400).send(e.message);
   }
 };

@@ -62,9 +62,39 @@
         }
       }
     },
+    "/posts/search": {
+      "get": {
+        "summary": "Search posts",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The search term for querying posts."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Post"
+              }
+            }
+          }
+        }
+      }
+    },
     "/posts/{id}": {
       "get": {
         "summary": "Get a single post by ID",
+        "security": [
+          {
+            "x-auth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -82,6 +112,128 @@
           },
           "404": {
             "description": "Post not found"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a post by ID",
+        "security": [
+          {
+            "x-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "UpdatePost",
+            "in": "body",
+            "description": "Post object with updated fields",
+            "schema": {
+              "$ref": "#/definitions/NewPost"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Post"
+            }
+          },
+          "404": {
+            "description": "Post not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a post by ID",
+        "security": [
+          {
+            "x-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post deleted successfully"
+          },
+          "404": {
+            "description": "Post not found"
+          }
+        }
+      }
+    },
+    "/posts/{id}/comments": {
+      "post": {
+        "summary": "Add a comment to a post",
+        "security": [
+          {
+            "x-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Comment",
+            "in": "body",
+            "description": "Comment object to be added",
+            "schema": {
+              "$ref": "#/definitions/NewComment"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Comment added successfully"
+          }
+        }
+      }
+    },
+    "/posts/{postId}/comments/{commentId}": {
+      "delete": {
+        "summary": "Delete a comment from a post",
+        "security": [
+          {
+            "x-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment deleted successfully"
+          },
+          "404": {
+            "description": "Post or comment not found"
           }
         }
       }
@@ -140,6 +292,24 @@
           }
         }
       }
+    },
+    "/users/me/token": {
+      "delete": {
+        "summary": "Logs out a user",
+       "security": [
+          {
+            "x-auth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User logged out successfully"
+          },
+          "400": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -178,6 +348,13 @@
         "body": { "type": "string" }
       },
       "required": ["title", "category", "body"]
+    },
+    "NewComment": {
+      "type": "object",
+      "properties": {
+        "comment": { "type": "string" }
+      },
+      "required": ["comment"]
     },
     "User": {
       "type": "object",
