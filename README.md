@@ -14,8 +14,8 @@ The Blog API Platform is a RESTful API designed for managing blog posts, comment
     │   ├── postController.js     # Business logic for posts
     │   ├── userController.js     # Business logic for users
     ├── middlewares
-    │   ├── requireAuth.js     # Middleware for authentication
-    │   ├── requireAdmin.js    # Middleware for admin authorization
+    │   ├── requireAuth.js        # Middleware for authentication
+    │   ├── requireAdmin.js       # Middleware for admin authorization
     ├── models
     │   ├── Post.js               # Mongoose schema and model for posts
     │   ├── User.js               # Mongoose schema and model for users
