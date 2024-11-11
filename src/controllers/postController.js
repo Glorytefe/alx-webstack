@@ -1,3 +1,10 @@
+/**
+ * @module controllers/postController
+ * This module provides functions for managing posts in the blog platform,
+ * including CRUD operations for posts and comments.
+ */
+
+
 const { Post } = require("../models/post");
 const { User } = require("../models/user");
 const { ObjectId } = require("mongodb");
@@ -5,8 +12,6 @@ const _ = require("lodash");
 
 exports.getPosts = async (req, res) => {
   try {
-    console.log("getting all posts");
-
     const posts = await Post.find();
 
     res.status(200).send({ posts });
@@ -62,7 +67,7 @@ exports.createPost = async (req, res) => {
     res.status(201).send({ post });
   } catch (e) {
     console.error("Post creation error:", e);
-    res.status(400).send({ error: "Could not create post" });
+    res.status(400).send({ error: e.message });
   }
 };
 
@@ -98,11 +103,26 @@ exports.getPostById = async (req, res) => {
 exports.updatePost = async (req, res) => {
   try {
     const id = req.params.id;
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).send({ error: "Invalid post ID" });
+    }
+
+    const post = await Post.findById(id);
+    if (!post) {
+      return res.status(404).send({ error: "Post not found" });
+    }
+
+    if (req.user.displayName !== post.author) {
+      return res.status(403).send({ error: "Unauthorized to update this post" });
+    }
+
     const body = _.pick(req.body, ["title", "category", "body"]);
-    const post = await Post.findOneAndUpdate(id, { $set: body }, { new: true });
+    Object.assign(post, body);
+    await post.save();
     res.status(200).send({ post });
   } catch (e) {
-    res.status(400).send({ error: "Could not update post." });
+    res.status(400).send({ error: e.message });
   }
 };
 
@@ -110,9 +130,8 @@ exports.deletePost = async (req, res) => {
   try {
     const id = req.params.id;
 
-    if (!ObjectId.isValid(id)) return res.status(400).send();
+    if (!ObjectId.isValid(id)) return res.status(400).send({ error: "Id is not valid." });
 
-    // const post = await Post.findByIdAndRemove(id);
     const post = await Post.findById(id);
     if (!post) return res.status(404).send({ error: "Post not found." });
     if (req.user.displayName !== post.author) {
@@ -132,7 +151,7 @@ exports.deletePost = async (req, res) => {
 exports.addCommentToPost = async (req, res) => {
   try {
     const id = req.params.id;
-    if (!ObjectId.isValid(id)) throw new Error();
+    if (!ObjectId.isValid(id)) return res.status(400).send({ error: "Id is required." });
 
     const body = _.pick(req.body, ["comment"]);
     body.createdBy = req.user.displayName;
@@ -170,3 +189,5 @@ exports.deleteCommentFromPost = async (req, res) => {
     res.status(500).send({ error: "Unable to delete comment" });
   }
 };
+
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzI0M2M4ZDZiZjM5M2Q3N2M2NGE4NTYiLCJyb2xlIjoidXNlciIsImRpc3BsYXlOYW1lIjoidGVmZWdsbyIsImlhdCI6MTczMDQyODA0N30.ot0n5FZK-CCrDP23T7PlAtUgJxfBnAZJl4xbLaW_QqE
