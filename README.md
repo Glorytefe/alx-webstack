@@ -79,5 +79,6 @@ The Blog API Platform is a RESTful API designed for managing blog posts, comment
 
 ```{PORT}/api-docs/```
 
-### Contributing
+### Screenshot of Swagger Documentation
+![alt text](swagger.png)
 
